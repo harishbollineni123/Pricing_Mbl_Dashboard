@@ -3,11 +3,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell, Legend } from "recharts"
 import { DATA } from "@/lib/dashboard-data"
 import { type DashboardData } from "@/lib/dashboard-filters"
 import { cn } from "@/lib/utils"
-import { TrendingUp, BarChart3 } from "lucide-react"
+import { TrendingUp, BarChart3, Wallet } from "lucide-react"
 
 const modeColor: Record<string, string> = { 
   sea: "#0ea5e9", 
@@ -30,9 +31,12 @@ function InsightTile({ value, label, tone }: { value: string; label: string; ton
 }
 
 export function Step3Jobs({ data = DATA }: { data?: DashboardData }) {
+  const disbursementTotal = data.paymentsDashboard.paymentDisbursements.totalAed
+  const receiptAed = data.paymentsDashboard.paymentReceipts.rows.find((row) => row.currency === "AED")?.received ?? 0
+
   return (
     <Tabs defaultValue="funnel" className="w-full">
-      <TabsList className="mb-4 grid h-10 w-full grid-cols-2 rounded-xl bg-muted/70 p-1">
+      <TabsList className="mb-4 grid h-10 w-full grid-cols-3 rounded-xl bg-muted/70 p-1">
         <TabsTrigger
           value="funnel"
           className="gap-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-primary/20 dark:data-[state=active]:text-primary"
@@ -44,6 +48,12 @@ export function Step3Jobs({ data = DATA }: { data?: DashboardData }) {
           className="gap-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-primary/20 dark:data-[state=active]:text-primary"
         >
           <BarChart3 className="h-3.5 w-3.5" /> Breakdown
+        </TabsTrigger>
+        <TabsTrigger
+          value="payments"
+          className="gap-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-primary/20 dark:data-[state=active]:text-primary"
+        >
+          <Wallet className="h-3.5 w-3.5" /> Payments
         </TabsTrigger>
       </TabsList>
 
@@ -129,6 +139,49 @@ export function Step3Jobs({ data = DATA }: { data?: DashboardData }) {
               <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" /> Air</span>
               <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Road</span>
             </div>
+          </CardContent>
+        </Card>
+      </TabsContent>
+
+      <TabsContent value="payments" className="mt-0 space-y-4">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+          <InsightTile value={data.paymentsDashboard.invoices.total.toLocaleString()} label="Invoices" tone="purple" />
+          <InsightTile value={data.paymentsDashboard.paymentReceipts.total.toLocaleString()} label="Receipts" tone="green" />
+          <InsightTile value={`AED ${receiptAed.toLocaleString()}`} label="AED Received" tone="blue" />
+          <InsightTile value={`AED ${disbursementTotal.toLocaleString()}`} label="Disbursements" tone="purple" />
+        </div>
+
+        <Card className="shadow-none">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3">
+            <CardTitle className="text-sm font-semibold">Invoices ({data.paymentsDashboard.invoices.total})</CardTitle>
+            <Badge variant="outline" className="text-[10px]">Payments Monitor</Badge>
+          </CardHeader>
+          <CardContent className="space-y-3 px-4 pb-4 pt-0">
+            <div className="overflow-x-auto rounded-md border border-border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Mode</TableHead>
+                    <TableHead className="text-right">Count</TableHead>
+                    <TableHead className="text-right">Grand Total (AED)</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.paymentsDashboard.invoices.rows.map((row) => (
+                    <TableRow key={`${row.status}-${row.mode}`}>
+                      <TableCell className="capitalize">{row.status}</TableCell>
+                      <TableCell>{row.mode}</TableCell>
+                      <TableCell className="text-right tabular-nums">{row.count}</TableCell>
+                      <TableCell className="text-right tabular-nums">{row.grandTotalAed.toLocaleString()}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            <p className="rounded-md bg-amber-50 px-2.5 py-2 text-[11px] text-amber-700 dark:bg-amber-950/30 dark:text-amber-300">
+              {data.paymentsDashboard.invoices.outlierNote}
+            </p>
           </CardContent>
         </Card>
       </TabsContent>

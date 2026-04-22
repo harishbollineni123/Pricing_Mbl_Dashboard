@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { RadialBarChart, RadialBar, ResponsiveContainer, ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts"
 import { DATA } from "@/lib/dashboard-data"
 import { type DashboardData } from "@/lib/dashboard-filters"
@@ -228,37 +229,96 @@ function RoadOpsPanel({ data }: { data: DashboardData }) {
 
 export function Step4Operations({ data = DATA }: { data?: DashboardData }) {
   return (
-    <Tabs defaultValue="sea" className="w-full">
-      <TabsList className="mb-4 grid h-10 w-full grid-cols-3 rounded-xl bg-muted/70 p-1">
-        <TabsTrigger
-          value="sea"
-          className="gap-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-primary/20 dark:data-[state=active]:text-primary"
-        >
-          <Ship className="h-3.5 w-3.5" /> Sea
-        </TabsTrigger>
-        <TabsTrigger
-          value="air"
-          className="gap-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-primary/20 dark:data-[state=active]:text-primary"
-        >
-          <Plane className="h-3.5 w-3.5" /> Air
-        </TabsTrigger>
-        <TabsTrigger
-          value="road"
-          className="gap-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-primary/20 dark:data-[state=active]:text-primary"
-        >
-          <Truck className="h-3.5 w-3.5" /> Road
-        </TabsTrigger>
-      </TabsList>
+    <div className="space-y-4">
+      <Tabs defaultValue="sea" className="w-full">
+        <TabsList className="mb-4 grid h-10 w-full grid-cols-3 rounded-xl bg-muted/70 p-1">
+          <TabsTrigger
+            value="sea"
+            className="gap-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-primary/20 dark:data-[state=active]:text-primary"
+          >
+            <Ship className="h-3.5 w-3.5" /> Sea
+          </TabsTrigger>
+          <TabsTrigger
+            value="air"
+            className="gap-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-primary/20 dark:data-[state=active]:text-primary"
+          >
+            <Plane className="h-3.5 w-3.5" /> Air
+          </TabsTrigger>
+          <TabsTrigger
+            value="road"
+            className="gap-1.5 rounded-lg text-xs font-semibold data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-primary/20 dark:data-[state=active]:text-primary"
+          >
+            <Truck className="h-3.5 w-3.5" /> Road
+          </TabsTrigger>
+        </TabsList>
 
-      <TabsContent value="sea" className="mt-0">
-        <SeaOpsPanel data={data} />
-      </TabsContent>
-      <TabsContent value="air" className="mt-0">
-        <AirOpsPanel data={data} />
-      </TabsContent>
-      <TabsContent value="road" className="mt-0">
-        <RoadOpsPanel data={data} />
-      </TabsContent>
-    </Tabs>
+        <TabsContent value="sea" className="mt-0">
+          <SeaOpsPanel data={data} />
+        </TabsContent>
+        <TabsContent value="air" className="mt-0">
+          <AirOpsPanel data={data} />
+        </TabsContent>
+        <TabsContent value="road" className="mt-0">
+          <RoadOpsPanel data={data} />
+        </TabsContent>
+      </Tabs>
+
+      <Card className="shadow-none">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3">
+          <CardTitle className="text-sm font-semibold">Receipts / Disbursements / Purchase Orders</CardTitle>
+          <Badge variant="outline" className="text-[10px]">Finance Ops</Badge>
+        </CardHeader>
+        <CardContent className="space-y-4 px-4 pb-4 pt-0">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            <Card className="bg-muted/30 py-0 shadow-none">
+              <CardContent className="px-3 py-2.5">
+                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Payment Receipts</p>
+                <p className="text-xl font-bold tabular-nums">{data.paymentsDashboard.paymentReceipts.total}</p>
+                <p className="text-[10px] text-muted-foreground">All {data.paymentsDashboard.paymentReceipts.status}</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-muted/30 py-0 shadow-none">
+              <CardContent className="px-3 py-2.5">
+                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Disbursements</p>
+                <p className="text-xl font-bold tabular-nums">{data.paymentsDashboard.paymentDisbursements.total}</p>
+                <p className="text-[10px] text-muted-foreground">AED {data.paymentsDashboard.paymentDisbursements.totalAed.toLocaleString()}</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-muted/30 py-0 shadow-none">
+              <CardContent className="px-3 py-2.5">
+                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Purchase Orders</p>
+                <p className="text-xl font-bold tabular-nums">{data.paymentsDashboard.purchaseOrders.total}</p>
+                <p className="text-[10px] text-muted-foreground">Mixed currency</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="overflow-x-auto rounded-md border border-border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Currency</TableHead>
+                  <TableHead className="text-right">Count</TableHead>
+                  <TableHead className="text-right">Received</TableHead>
+                  <TableHead className="text-right">Allocated</TableHead>
+                  <TableHead className="text-right">Unallocated</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.paymentsDashboard.paymentReceipts.rows.map((row) => (
+                  <TableRow key={row.currency}>
+                    <TableCell>{row.currency}</TableCell>
+                    <TableCell className="text-right tabular-nums">{row.count}</TableCell>
+                    <TableCell className="text-right tabular-nums">{row.received.toLocaleString()}</TableCell>
+                    <TableCell className="text-right tabular-nums">{row.allocated.toLocaleString()}</TableCell>
+                    <TableCell className="text-right tabular-nums">{row.unallocated.toLocaleString()}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

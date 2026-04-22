@@ -26,9 +26,9 @@ export function WizardStepper({ active, setActive, stepCounts }: WizardStepperPr
   }, [active])
 
   return (
-    <div className="sticky top-14 z-30 border-b border-border bg-background md:top-[104px]">
-      <div className="scrollbar-hide overflow-x-auto md:overflow-x-visible">
-        <div className="flex items-stretch gap-1.5 px-4 py-2.5 md:w-full md:gap-2 md:px-6">
+    <div className="sticky top-14 z-30 overflow-hidden border-b border-border bg-background md:top-[104px]">
+      <div className="scrollbar-hide overflow-x-auto px-4 md:overflow-x-visible md:px-6">
+        <div className="flex min-w-max items-stretch gap-1.5 py-2.5 md:w-full md:min-w-0 md:gap-2">
           {STEPS_CONFIG.map((step, i) => {
             const Icon = step.icon
             const isActive = active === step.id

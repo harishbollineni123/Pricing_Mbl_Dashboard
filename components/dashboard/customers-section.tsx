@@ -2,7 +2,7 @@
 
 import { FileText, Briefcase } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
 import { DATA } from "@/lib/dashboard-data"
 import { type DashboardData, type InteractionSelection } from "@/lib/dashboard-filters"
@@ -26,10 +26,15 @@ const avatarColors = [
   "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300",
 ]
 
+function getRandomPersonImage(seed: string, index: number) {
+  const poolIndex = (seed.length + index * 7) % 70
+  return `https://i.pravatar.cc/80?img=${poolIndex + 1}`
+}
+
 function CustomerCard({ title, icon: Icon, rows, max, tone, activeCustomer, onSelectCustomer }: CustomerCardProps) {
   return (
     <Card className="shadow-none">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-0">
         <CardTitle className="flex items-center gap-2 text-sm font-semibold">
           <div className={cn(
             "flex h-7 w-7 items-center justify-center rounded-md",
@@ -42,7 +47,7 @@ function CustomerCard({ title, icon: Icon, rows, max, tone, activeCustomer, onSe
           {title}
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2.5 px-4 pb-4 pt-0">
+      <CardContent className="space-y-2.5 px-4 pt-0">
         {rows.map((c, i) => {
           const pct = (c.count / max) * 100
           return (
@@ -59,6 +64,7 @@ function CustomerCard({ title, icon: Icon, rows, max, tone, activeCustomer, onSe
                 {i + 1}
               </span>
               <Avatar className="h-8 w-8">
+                <AvatarImage src={getRandomPersonImage(c.name, i)} alt={c.name} />
                 <AvatarFallback className={cn("text-[10px] font-semibold", avatarColors[i % avatarColors.length])}>
                   {c.initials}
                 </AvatarFallback>

@@ -25,30 +25,41 @@ export function Step5POD({ data = DATA }: { data?: DashboardData }) {
   return (
     <div className="space-y-4">
       {/* Success Rate Card */}
-      <Card className="border-l-[3px] border-l-green-500 shadow-none">
-        <CardContent className="p-4">
-          <p className="text-xs font-medium text-muted-foreground">Delivery Success Rate</p>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-3xl font-bold tabular-nums text-foreground">{successRate}%</span>
-            <span className="text-sm text-muted-foreground">
+      <Card className="gap-0 border border-emerald-200 bg-emerald-50/35 py-0 shadow-none dark:border-emerald-900 dark:bg-emerald-950/15">
+        <CardContent className="px-3 py-3 sm:p-4">
+          <div className="mb-2 flex items-start justify-between gap-2">
+            <p className="text-[11px] font-semibold text-muted-foreground sm:text-xs">Delivery Success Rate</p>
+            <div className="rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300">
+              POD
+            </div>
+          </div>
+          <div className="mt-1 flex flex-wrap items-end gap-x-2 gap-y-1">
+            <span className="text-2xl font-bold leading-none tabular-nums tracking-tight text-foreground sm:text-3xl">{successRate}%</span>
+            <span className="rounded-full bg-background/90 px-2 py-0.5 text-[10px] text-muted-foreground sm:text-xs">
               ({data.overview.podCompleted}/{data.overview.activeJobs})
             </span>
           </div>
           <div className="mt-3 grid grid-cols-3 gap-2">
-            <div className="rounded-md bg-muted p-2">
-              <Ship className="h-3.5 w-3.5 text-sky-600" />
-              <p className="mt-1 text-lg font-bold tabular-nums text-foreground">{seaPods}</p>
-              <p className="text-[9px] text-muted-foreground">Sea POD</p>
+            <div className="rounded-md border border-sky-200 bg-background/70 p-2 dark:border-sky-900 dark:bg-background/40">
+              <div className="flex items-center gap-1.5">
+                <Ship className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400" />
+                <p className="text-[9px] font-semibold text-muted-foreground">Sea POD</p>
+              </div>
+              <p className="mt-1 text-lg font-bold leading-none tabular-nums tracking-tight text-foreground">{seaPods}</p>
             </div>
-            <div className="rounded-md bg-muted p-2">
-              <Plane className="h-3.5 w-3.5 text-amber-600" />
-              <p className="mt-1 text-lg font-bold tabular-nums text-foreground">{airPods}</p>
-              <p className="text-[9px] text-muted-foreground">Air POD</p>
+            <div className="rounded-md border border-amber-200 bg-background/70 p-2 dark:border-amber-900 dark:bg-background/40">
+              <div className="flex items-center gap-1.5">
+                <Plane className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+                <p className="text-[9px] font-semibold text-muted-foreground">Air POD</p>
+              </div>
+              <p className="mt-1 text-lg font-bold leading-none tabular-nums tracking-tight text-foreground">{airPods}</p>
             </div>
-            <div className="rounded-md bg-muted p-2">
-              <Truck className="h-3.5 w-3.5 text-emerald-600" />
-              <p className="mt-1 text-lg font-bold tabular-nums text-foreground">{roadPods}</p>
-              <p className="text-[9px] text-muted-foreground">Road POD</p>
+            <div className="rounded-md border border-emerald-200 bg-background/70 p-2 dark:border-emerald-900 dark:bg-background/40">
+              <div className="flex items-center gap-1.5">
+                <Truck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                <p className="text-[9px] font-semibold text-muted-foreground">Road POD</p>
+              </div>
+              <p className="mt-1 text-lg font-bold leading-none tabular-nums tracking-tight text-foreground">{roadPods}</p>
             </div>
           </div>
         </CardContent>
@@ -56,9 +67,8 @@ export function Step5POD({ data = DATA }: { data?: DashboardData }) {
 
       {/* Recent Deliveries */}
       <Card className="shadow-none">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-0">
           <CardTitle className="text-sm font-semibold">Recent Deliveries</CardTitle>
-          <button className="text-xs font-medium text-primary hover:underline">View all</button>
         </CardHeader>
         <CardContent className="px-4 pb-4 pt-0">
           <div className="space-y-3">
